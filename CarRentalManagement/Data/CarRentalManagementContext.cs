@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using CarRentalManagement.Domains;
+using CarRentalManagement.Data;
 using CarRentalManagement.Configuration.Entities;
 
 namespace CarRentalManagement.Data
 {
-    public class CarRentalManagementContext : DbContext
+    public class CarRentalManagementContext(DbContextOptions<CarRentalManagementContext> options) : IdentityDbContext<CarRentalManagementUser>(options)
     {
-        public CarRentalManagementContext (DbContextOptions<CarRentalManagementContext> options)
-            : base(options)
-        {
-        }
 
         public DbSet<CarRentalManagement.Domains.Make> Make { get; set; } = default!;
         public DbSet<CarRentalManagement.Domains.Model> Model { get; set; } = default!;
@@ -22,11 +15,11 @@ namespace CarRentalManagement.Data
         public DbSet<CarRentalManagement.Domains.Booking> Booking { get; set; } = default!;
         public DbSet<CarRentalManagement.Domains.Customer> Customer { get; set; } = default!;
 
-        protected override void OnModelCreating (ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating (builder);
+            base.OnModelCreating(builder);
 
-            //builder.ApplyConfiguration(new ColourSeed());
+            builder.ApplyConfiguration(new ColourSeed());
             builder.ApplyConfiguration(new MakeSeed());
             builder.ApplyConfiguration(new ModelSeed());
         }
